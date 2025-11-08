@@ -37,7 +37,7 @@ body {
   --color-green: #585312;
   --color-gold: #C2A570;
   --color-beige: #F4EDE4;
-  --color-dark-brown: #2D2A26;
+  --color-dark-brown: #5B4636;
   --color-text-dark: #2D2A26;
 
 }
@@ -113,7 +113,7 @@ a:hover {
 
 /* === Footer === */
 footer {
-  background-color: var(--color-dark-brown);
+  background-color: var(--color-text-dark);
   color: var(--color-beige);
   padding: 2rem;
   text-align: center;
