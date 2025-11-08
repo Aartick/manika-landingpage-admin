@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { GiHourglass, GiLaurelCrown, GiCrystalBars } from "react-icons/gi";
-import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic } from "react-icons/fa";
+import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic, FaQuoteLeft } from "react-icons/fa";
 import { ChevronDown } from 'lucide-react';
 
 const FAQAccordion = () => {
@@ -108,55 +108,99 @@ export default function ShadowWorkLanding() {
   return (
     <div className="bg-background text-dark-brown">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#F4EDE4] to-[#E8DFD3] py-20 px-6 min-h-screen flex items-center">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-dark-brown leading-tight">
-            Heal the Wound of Not-Enoughness
-          </h1>
-          <h2 className="text-2xl md:text-3xl mb-8 text-dark-brown font-light">
-            A 90-minute somatic shadow-work workshop for women ready to release guilt, shame, and self-criticism
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <button className="btn-primary text-lg" onClick={scrollToEnroll}>
-              Reserve Your Seat
-            </button>
-            <button className="btn-secondary" onClick={scrollToAbout}>
-              Learn More
-            </button>
-          </div>
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto">
-            {/* Card 1 */}
-            <div className="card rounded-3xl bg-white/70 backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 relative overflow-hidden group">
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-[#C2A570]/20 to-[#D4B882]/10 rounded-full blur-2xl"></div>
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe] group-hover:shadow-2xl transition-shadow duration-300">
-                <GiHourglass className="text-brown drop-shadow-xl" />
-              </div>
-              <h3 className="font-semibold text-xl mb-2 text-dark-brown tracking-wide">90 Minutes</h3>
-              <p className="text-dark-brown/70">Deep transformative work</p>
-            </div>
+   <section className="bg-beige py-20 px-6 flex flex-col items-center">
+  <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    
+    {/* Left: Text Content */}
+    <div className="order-2 lg:order-1 text-center lg:text-left">
+      <h1 className="text-5xl md:text-7xl font-bold mb-6 text-dark-brown leading-tight">
+        Heal the Wound of Not-Enoughness
+      </h1>
 
-            {/* Card 2 */}
-            <div className="card rounded-3xl bg-white/70 backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 relative overflow-hidden group">
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-tl from-[#D4B882]/40 to-[#C2A570]/10 rounded-full blur-2xl"></div>
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe] group-hover:shadow-2xl transition-shadow duration-300">
-                <GiLaurelCrown className="text-brown drop-shadow-xl" />
-              </div>
-              <h3 className="font-semibold text-xl mb-2 text-dark-brown tracking-wide">Live Workshop</h3>
-              <p className="text-dark-brown/70">Interactive & guided</p>
-            </div>
+      <h2 className="text-2xl md:text-3xl mb-8 text-dark-brown font-light">
+        A 90-minute somatic shadow-work workshop for women ready to release guilt, shame, and self-criticism
+      </h2>
 
-            {/* Card 3 */}
-            <div className="card rounded-3xl bg-white/70 backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 relative overflow-hidden group">
-              <div className="absolute -bottom-5 -left-5 w-24 h-24 bg-gradient-to-tr from-[#D4B882]/30 to-[#C2A570]/10 rounded-full blur-2xl"></div>
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe] group-hover:shadow-2xl transition-shadow duration-300">
-                <GiCrystalBars className="text-brown drop-shadow-xl" />
-              </div>
-              <h3 className="font-semibold text-xl mb-2 text-dark-brown tracking-wide">Bonus Resources</h3>
-              <p className="text-dark-brown/70">Guides & replay access</p>
-            </div>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
+        <button className="btn-primary text-lg" onClick={scrollToEnroll}>
+          Reserve Your Seat
+        </button>
+        <button className="btn-secondary" onClick={scrollToAbout}>
+          Learn More
+        </button>
+      </div>
+    </div>
+
+    {/* Right: Image Design */}
+    <div className="relative order-1 lg:order-2">
+      <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 md:p-6 shadow-2xl sm:rounded-[2rem] sm:p-6 lg:p-10">
+        {/* Inner frame */}
+        <div className="relative rounded-[1.25rem] bg-white p-3 md:p-5 shadow-inner sm:rounded-[1.5rem] sm:p-6 lg:p-8">
+          {/* Photo */}
+          <div className="relative overflow-hidden rounded-xl shadow-lg sm:rounded-[1rem]">
+            <img
+              src="/heroimage1.jpg"
+              alt="Aditi Nirvaan"
+              className="h-[440px] md:h-[600px] w-full object-cover object-[center_0%] transition-all duration-500 hover:scale-105 sm:h-[350px] lg:h-[580px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
           </div>
         </div>
-      </section>
+
+        {/* Golden corner dots */}
+        <div className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-gradient-to-br from-[#C79348] to-[#C8A030] shadow-lg sm:-top-3 sm:-right-3 sm:h-6 sm:w-6" />
+        <div className="absolute -bottom-2 -left-2 h-5 w-5 rounded-full bg-gradient-to-br from-[#DEC966] to-[#EADF9E] shadow-lg sm:-bottom-3 sm:-left-3 sm:h-6 sm:w-6" />
+
+        {/* Thin border accents */}
+        <div className="absolute top-3 right-3 h-0.5 w-6 bg-gradient-to-r from-[#C79348] to-transparent sm:w-8" />
+        <div className="absolute top-3 right-3 h-6 w-0.5 bg-gradient-to-b from-[#C79348] to-transparent sm:h-8" />
+        <div className="absolute bottom-3 left-3 h-0.5 w-6 bg-gradient-to-l from-[#DEC966] to-transparent sm:w-8" />
+        <div className="absolute bottom-3 left-3 h-6 w-0.5 bg-gradient-to-t from-[#DEC966] to-transparent sm:h-8" />
+      </div>
+
+      {/* Floating Quote */}
+      <div className="absolute left-1/2 -bottom-6 w-[92%] md:w-[88%] max-w-sm -translate-x-1/2">
+        <div className="rounded-2xl border border-[#DDC48B]/20 bg-white/95 p-3 shadow-2xl backdrop-blur-md sm:p-4">
+          <p className="text-center text-sm font-medium leading-relaxed italic text-brown sm:text-base">
+            Shadow work and Inner child healing
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Cards Below Both */}
+  <div className="mt-28 grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl w-full">
+    {/* Card 1 */}
+    <div className="rounded-3xl bg-beige backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 p-6 text-center">
+      <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe]">
+        <GiHourglass className="text-brown drop-shadow-xl" />
+      </div>
+      <h3 className="font-semibold text-xl mb-2 text-dark-brown">90 Minutes</h3>
+      <p className="text-dark-brown/70">Deep transformative work</p>
+    </div>
+
+    {/* Card 2 */}
+    <div className="rounded-3xl bg-beige backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 p-6 text-center">
+      <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe]">
+        <GiLaurelCrown className="text-brown drop-shadow-xl" />
+      </div>
+      <h3 className="font-semibold text-xl mb-2 text-dark-brown">Live Workshop</h3>
+      <p className="text-dark-brown/70">Interactive & guided</p>
+    </div>
+
+    {/* Card 3 */}
+    <div className="rounded-3xl bg-beige backdrop-blur-lg border border-[#C2A570]/30 shadow-xl hover:scale-105 transition-all duration-300 p-6 text-center">
+      <div className="w-16 h-16 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-2xl flex items-center justify-center text-4xl shadow-lg mx-auto mb-5 border-[3px] border-[#e7debe]">
+        <GiCrystalBars className="text-brown drop-shadow-xl" />
+      </div>
+      <h3 className="font-semibold text-xl mb-2 text-dark-brown">Bonus Resources</h3>
+      <p className="text-dark-brown/70">Guides & replay access</p>
+    </div>
+  </div>
+</section>
+
+
 
       {/* Problem Section */}
       <section className="py-20 px-6 bg-beige">
@@ -189,7 +233,7 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* Promise Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#F4EDE4] to-[#FFF8F0]">
+      <section className="py-20 px-6 bg-beige">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-dark-brown">
             Imagine Feeling...
@@ -219,52 +263,63 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* Offer Section */}
-      <section className="py-20 px-6 bg-beige" id="offer">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-bold mb-4 text-dark-brown">
-              The Shadow Work Workshop
-            </h2>
-            <p className="text-2xl text-dark-brown/70 font-light">
-              A guided deep-dive into your shadow to reclaim your self-worth and power
-            </p>
-          </div>
-          
-          <div className="card max-w-3xl mx-auto mb-12 bg-gradient-to-br from-white to-amber-50">
-            <p className="text-lg text-dark-brown leading-relaxed mb-6">
-              This 90-minute immersive experience blends guided somatic practices, shadow work inquiry, and the SPACE™ Method to help you release the emotional charge of old wounds and step into your wholeness. You'll leave with clarity, tools, and a deeper sense of safety in your own body.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              {[
-                { icon: <GiHourglass className="text-2xl" />, title: 'Duration', desc: '90 minutes of deep work' },
-                { icon: <FaVideo className="text-2xl" />, title: 'Location', desc: 'Live on Zoom' },
-                { icon: <FaBullseye className="text-2xl" />, title: 'Format', desc: 'Interactive & guided' },
-                { icon: <FaGift className="text-2xl" />, title: 'Bonus', desc: '7-day replay access' }
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-xl flex items-center justify-center shadow-lg border-[2px] border-[#e7debe] flex-shrink-0">
-                    <div className="text-brown drop-shadow-lg">{item.icon}</div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-lg mb-1 text-dark-brown">{item.title}</h4>
-                    <p className="text-dark-brown/70">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
+    <section className="py-20 px-6 bg-beige" id="offer">
+  <div className="max-w-5xl mx-auto">
+    
+    {/* Heading */}
+    <div className="text-center mb-12">
+      <h2 className="text-5xl font-bold mb-4 text-dark-brown">
+        The Shadow Work Workshop
+      </h2>
+      <p className="text-2xl text-dark-brown/70 font-light">
+        A guided deep-dive into your shadow to reclaim your self-worth and power
+      </p>
+    </div>
+    
+    {/* Main Card */}
+    <div className="card max-w-3xl mx-auto mb-12 bg-beige rounded-3xl border border-[#C2A570]/30 shadow-xl p-8 md:p-10 backdrop-blur-lg">
+      <p className="text-lg text-dark-brown leading-relaxed mb-8">
+        This 90-minute immersive experience blends guided somatic practices, shadow work inquiry, and the SPACE™ Method 
+        to help you release the emotional charge of old wounds and step into your wholeness. You'll leave with clarity, 
+        tools, and a deeper sense of safety in your own body.
+      </p>
+      
+      {/* Details Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        {[
+          { icon: <GiHourglass className="text-2xl" />, title: 'Duration', desc: '90 minutes of deep work' },
+          { icon: <FaVideo className="text-2xl" />, title: 'Location', desc: 'Live on Zoom' },
+          { icon: <FaBullseye className="text-2xl" />, title: 'Format', desc: 'Interactive & guided' },
+          { icon: <FaGift className="text-2xl" />, title: 'Bonus', desc: '7-day replay access' },
+        ].map((item, idx) => (
+          <div key={idx} className="flex items-start gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-xl flex items-center justify-center shadow-lg border-[2px] border-[#e7debe] flex-shrink-0">
+              <div className="text-brown drop-shadow-lg">{item.icon}</div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg mb-1 text-dark-brown">{item.title}</h4>
+              <p className="text-dark-brown/70">{item.desc}</p>
             </div>
           </div>
+        ))}
+      </div>
 
-          <div className="text-center">
-            <button className="btn-primary text-xl" onClick={scrollToEnroll}>
-              Join Now
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* CTA Button Inside Card */}
+      <div className="text-center">
+        <button
+          className="btn-primary text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300"
+          onClick={scrollToEnroll}
+        >
+          Join Now
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* What You'll Experience */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#FFF8F0] to-[#F4EDE4]">
+      <section className="py-20 px-6 bg-beige">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-dark-brown">
             What You'll Experience
@@ -289,7 +344,7 @@ export default function ShadowWorkLanding() {
             ))}
           </div>
 
-          <div className="card max-w-3xl mx-auto bg-gradient-to-br from-amber-50 to-white">
+          <div className="card max-w-3xl mx-auto bg-beige">
             <p className="text-lg text-dark-brown leading-relaxed">
               The experience blends guided meditation, somatic inquiry, and SPACE™ journaling to create lasting shifts in how you relate to yourself and your worthiness.
             </p>
@@ -320,7 +375,7 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* Who It's For */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#F4EDE4] to-[#E8DFD3]">
+      <section className="py-20 px-6 bg-beige">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-dark-brown">
             Is This For You?
@@ -365,58 +420,112 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* About Manika */}
-      <section className="py-20 px-6 bg-beige" id="about">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-dark-brown">
-            Meet Manika
-          </h2>
-          
-          <div className="card bg-gradient-to-br from-white to-amber-50">
-            <p className="text-lg text-dark-brown leading-relaxed mb-6">
-              Manika is an Inner Child and Shadow Work Healer and creator of the SPACE™ Method. She has guided women across the world to heal core wounds, rewire survival patterns, and reclaim their golden shadow.
-            </p>
-            <p className="text-lg text-dark-brown leading-relaxed">
-              With a deep understanding of the nervous system, somatic practices, and transformational psychology, Manika creates safe containers for women to do the courageous work of coming home to themselves.
-            </p>
-          </div>
-
-          <div className="mt-12 card bg-gradient-to-r from-white to-[#F9F6F1] border-l-4 border-[#C2A570]">
-            <p className="text-xl italic text-dark-brown mb-4">
-              "After one session I felt more safety in my body than years of therapy. Manika has a gift for creating space where healing happens naturally."
-            </p>
-            <p className="font-semibold text-dark-brown/70">— R.S.</p>
-          </div>
+     <section className="py-20 px-6 bg-beige" id="about">
+  <div className="max-w-4xl mx-auto">
+    <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-dark-brown">
+      Meet Manika
+    </h2>
+    <div className="flex flex-col md:flex-row gap-10 items-center md:items-start bg-white/80 card rounded-3xl p-8 shadow-lg border border-[#E5DDD5]/70">
+      {/* Manika's Photo with golden accents */}
+      <div className="relative flex-shrink-0 w-56 h-56">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#C2A570]/20 to-[#D4B882]/20 rounded-full blur-xl"></div>
+        <div className="relative rounded-full overflow-hidden border-4 border-[#C2A570] shadow-2xl w-56 h-56" style={{boxShadow: '0 6px 48px rgba(200, 160, 48, 0.3)'}}>
+          <img 
+            src="/image1.jpg"
+            alt="Manika, Shadow Work Healer"
+            className="w-full h-full object-cover object-top"
+          />
         </div>
-      </section>
+        {/* Decorative elements */}
+        <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full border-2 border-white shadow-lg"></div>
+        <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-[#D4B882] to-[#C2A570] rounded-full border-2 border-white shadow-lg"></div>
+      </div>
+      {/* Bio */}
+      <div className="flex-1">
+        <p className="text-lg text-dark-brown leading-relaxed mb-6">
+          Manika is an Inner Child and Shadow Work Healer and creator of the SPACE™ Method. She has guided women across the world to heal core wounds, rewire survival patterns, and reclaim their golden shadow.
+        </p>
+        <p className="text-lg text-dark-brown leading-relaxed">
+          With a deep understanding of the nervous system, somatic practices, and transformational psychology, Manika creates safe containers for women to do the courageous work of coming home to themselves.
+        </p>
+      </div>
+    </div>
+    {/* Testimonial Card */}
+    <div className="mt-12 card bg-beige border-l-4 border-[#C2A570] p-8 shadow-lg">
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full flex items-center justify-center flex-shrink-0 shadow-lg border-2 border-[#e7debe]">
+          <FaQuoteLeft className="text-xl text-brown drop-shadow-lg" />
+        </div>
+        <div className="flex-1">
+          <p className="text-xl italic text-dark-brown mb-4 leading-relaxed">
+            After one session I felt more safety in my body than years of therapy. Manika has a gift for creating space where healing happens naturally.
+          </p>
+          <p className="font-semibold text-dark-brown/70">— R.S.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Testimonials */}
-      <section className="py-20 px-6 bg-gradient-to-br from-[#FFF8F0] to-[#F4EDE4]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-dark-brown">
-            What Women Are Saying
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            {[
-              { text: 'This work changed the way I relate to myself forever. I finally understand why I\'ve been running from my own worth.', author: 'A.K.' },
-              { text: 'I\'ve done years of personal development, but this was the first time I felt the shift in my body. It\'s not just intellectual anymore.', author: 'M.T.' },
-              { text: 'Manika held space in a way I\'ve never experienced. I felt safe enough to go to places I\'ve been avoiding for years.', author: 'S.L.' },
-              { text: 'The SPACE™ Method gave me tools I use daily. This workshop was the beginning of my real healing journey.', author: 'J.R.' }
-            ].map((testimonial, idx) => (
-              <div key={idx} className="card bg-gradient-to-r from-white to-[#F9F6F1] border-l-4 border-[#C2A570]">
-                <p className="text-lg italic text-dark-brown mb-4">"{testimonial.text}"</p>
-                <p className="font-semibold text-dark-brown/70">— {testimonial.author}</p>
-              </div>
-            ))}
+    <section className="py-20 px-6 bg-beige">
+  <div className="max-w-5xl mx-auto">
+    <h2 className="text-4xl md:text-5xl font-bold mb-14 text-center text-dark-brown font-inter tracking-tight uppercase">
+      What Women Are Saying
+    </h2>
+
+    <div className="flex flex-col md:flex-row md:space-x-10 space-y-8 md:space-y-0">
+      {[
+        {
+          text: "This work changed the way I relate to myself forever. I finally understand why I've been running from my own worth.",
+          author: "A.K.",
+        },
+        {
+          text: "I've done years of personal development, but this was the first time I felt the shift in my body. It's not just intellectual anymore.",
+          author: "M.T.",
+        },
+        {
+          text: "Manika held space in a way I've never experienced. I felt safe enough to go to places I've been avoiding for years.",
+          author: "S.L.",
+        },
+        {
+          text: "The SPACE™ Method gave me tools I use daily. This workshop was the beginning of my real healing journey.",
+          author: "J.R.",
+        },
+      ].map((testimonial, idx) => (
+        <div
+          key={idx}
+          className="flex-1 rounded-2xl bg-beige shadow-lg p-8 border-l-8 border-[#C2A570] hover:shadow-2xl transition-shadow duration-300"
+        >
+          {/* Quote Icon */}
+          <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full flex items-center justify-center mb-4 shadow-lg border-2 border-[#e7debe]">
+            <FaQuoteLeft className="text-xl text-brown drop-shadow-lg" />
           </div>
 
-          <div className="text-center">
-            <button className="btn-primary" onClick={scrollToEnroll}>
-              Book Your Spot
-            </button>
-          </div>
+          <p className="text-lg leading-relaxed text-dark-brown italic mb-6">
+            {testimonial.text}
+          </p>
+
+          <p className="text-right font-semibold text-dark-brown/70 tracking-wide">
+            - {testimonial.author}
+          </p>
         </div>
-      </section>
+      ))}
+    </div>
+
+    <div className="mt-14 flex justify-center">
+      <button
+        className="btn-primary text-lg px-10 py-3 rounded-full shadow-lg bg-gradient-to-r from-[#C2A570] to-[#D4B483] text-white font-semibold hover:brightness-110 transition-all"
+        onClick={scrollToEnroll}
+      >
+        Book Your Spot
+      </button>
+    </div>
+  </div>
+</section>
+
+
 
       {/* What's Included */}
       <section className="py-20 px-6 bg-beige" id="enroll">
@@ -451,7 +560,7 @@ export default function ShadowWorkLanding() {
 
       {/* FAQ */}
       <section className="container bg-beige mx-auto px-4 sm:px-8 md:px-10 lg:px-28 py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl rounded-2xl bg-gradient-to-br from-[#FBF9F1] via-[#FAF9EC] to-[#F6F0DE] border border-[#DDC48B]/40 shadow-[0_6px_24px_rgba(0,0,0,.06)] p-5 sm:p-8">
+        <div className="mx-auto max-w-5xl rounded-2xl bg-beige border border-[#DDC48B]/40 shadow-[0_6px_24px_rgba(0,0,0,.06)] p-5 sm:p-8">
           <div className="text-center mb-8 sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brown mb-3">
               Questions & Answers
