@@ -3,8 +3,9 @@
 
 import { useState, useEffect } from 'react';
 import { GiHourglass, GiLaurelCrown, GiCrystalBars } from "react-icons/gi";
-import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic, FaQuoteLeft } from "react-icons/fa";
-import { ChevronDown } from 'lucide-react';
+import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic, FaQuoteLeft, FaHeart } from "react-icons/fa";
+import { ChevronDown, Link } from 'lucide-react';
+import { SiGmail } from 'react-icons/si';
 
 const FAQAccordion = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -106,7 +107,7 @@ export default function ShadowWorkLanding() {
   };
 
   return (
-    <div className="bg-background text-dark-brown">
+    <div className="w-full bg-background text-dark-brown">
       {/* Hero Section */}
    <section className="bg-beige py-20 px-6 flex flex-col items-center">
   <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -199,8 +200,6 @@ export default function ShadowWorkLanding() {
     </div>
   </div>
 </section>
-
-
 
       {/* Problem Section */}
       <section className="py-20 px-6 bg-beige">
@@ -448,7 +447,15 @@ export default function ShadowWorkLanding() {
         <p className="text-lg text-dark-brown leading-relaxed">
           With a deep understanding of the nervous system, somatic practices, and transformational psychology, Manika creates safe containers for women to do the courageous work of coming home to themselves.
         </p>
+         <button
+    className="btn-primary mt-4"
+    onClick={() => window.open("http://manikaaggarwal.com/", "_blank")}
+    type="button"
+  >
+    Meet Manika
+  </button>
       </div>
+      
     </div>
     {/* Testimonial Card */}
     <div className="mt-12 card bg-beige border-l-4 border-[#C2A570] p-8 shadow-lg">
@@ -469,13 +476,13 @@ export default function ShadowWorkLanding() {
 
 
       {/* Testimonials */}
-    <section className="py-20 px-6 bg-beige">
+   <section className="py-20 px-6 bg-beige">
   <div className="max-w-5xl mx-auto">
     <h2 className="text-4xl md:text-5xl font-bold mb-14 text-center text-dark-brown font-inter tracking-tight uppercase">
       What Women Are Saying
     </h2>
 
-    <div className="flex flex-col md:flex-row md:space-x-10 space-y-8 md:space-y-0">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
       {[
         {
           text: "This work changed the way I relate to myself forever. I finally understand why I've been running from my own worth.",
@@ -527,6 +534,7 @@ export default function ShadowWorkLanding() {
 
 
 
+
       {/* What's Included */}
       <section className="py-20 px-6 bg-beige" id="enroll">
         <div className="max-w-4xl mx-auto">
@@ -559,7 +567,7 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* FAQ */}
-      <section className="container bg-beige mx-auto px-4 sm:px-8 md:px-10 lg:px-28 py-12 sm:py-16">
+      <section className=" bg-beige mx-auto px-4 sm:px-8 md:px-10 lg:px-28 py-12 sm:py-16">
         <div className="mx-auto max-w-5xl rounded-2xl bg-beige border border-[#DDC48B]/40 shadow-[0_6px_24px_rgba(0,0,0,.06)] p-5 sm:p-8">
           <div className="text-center mb-8 sm:mb-10">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brown mb-3">
@@ -576,35 +584,20 @@ export default function ShadowWorkLanding() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 px-6 bg-[#2D2A26] text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            You're Not Here By Chance
-          </h2>
-          <p className="text-2xl mb-8 font-light">Your healing has been calling.</p>
-          
-          <button className="btn-primary text-xl mb-8">
-            Reserve Your Seat Now
-          </button>
-          
-          <p className="text-xl italic opacity-90">
-            You were always enough. You always mattered. It's time to remember.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer>
-        <div className="max-w-6xl mx-auto">
-          <p className="mb-4">© 2024 Manika - Shadow Work & Inner Child Healing</p>
-          <div className="flex justify-center gap-6">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact</a>
-          </div>
-        </div>
-      </footer>
+<footer className="w-full bg-beige py-25 px-6">
+  <div className="max-w-4xl mx-auto text-center px-6 pb-24">  {/* Added pb-24 here */}
+    <h2 className="text-4xl md:text-6xl font-bold mb-6">
+      You're Not Here By Chance
+    </h2>
+    <p className="text-2xl mb-8 font-light">Your healing has been calling.</p>
+    <button className="btn-primary text-xl mb-8">
+      Reserve Your Seat Now
+    </button>
+    <p className="text-xl italic opacity-90">
+      You were always enough. You always mattered. It's time to remember.
+    </p>
+  </div>
+</footer>
 
       {/* Sticky CTA */}
       {showStickyCTA && (
@@ -615,6 +608,9 @@ export default function ShadowWorkLanding() {
               Reserve Your Seat
             </button>
           </div>
+
+
+              
         </div>
       )}
     </div>
