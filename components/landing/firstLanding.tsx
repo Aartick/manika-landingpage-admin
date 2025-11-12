@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { GiHourglass, GiLaurelCrown, GiCrystalBars } from "react-icons/gi";
-import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic, FaQuoteLeft, FaHeart } from "react-icons/fa";
+import { FaSpinner, FaBalanceScale, FaSyncAlt, FaMask, FaRedoAlt, FaSpa, FaSeedling, FaGem, FaBook, FaHandHoldingHeart, FaBullseye, FaFileAlt, FaVideo, FaGift, FaMagic, FaQuoteLeft, FaHeart, FaRegCalendarAlt, FaRegClock, FaDollarSign } from "react-icons/fa";
 import { ChevronDown, Link } from 'lucide-react';
 import { SiGmail } from 'react-icons/si';
 
@@ -262,7 +262,7 @@ export default function ShadowWorkLanding() {
       </section>
 
       {/* Offer Section */}
-    <section className="py-20 px-6 bg-beige" id="offer">
+   <section className="py-20 px-6 bg-beige" id="offer">
   <div className="max-w-5xl mx-auto">
     
     {/* Heading */}
@@ -277,19 +277,22 @@ export default function ShadowWorkLanding() {
     
     {/* Main Card */}
     <div className="card max-w-3xl mx-auto mb-12 bg-beige rounded-3xl border border-[#C2A570]/30 shadow-xl p-8 md:p-10 backdrop-blur-lg">
+      
       <p className="text-lg text-dark-brown leading-relaxed mb-8">
         This 90-minute immersive experience blends guided somatic practices, shadow work inquiry, and the SPACE™ Method 
         to help you release the emotional charge of old wounds and step into your wholeness. You'll leave with clarity, 
         tools, and a deeper sense of safety in your own body.
       </p>
       
-      {/* Details Grid */}
+      {/* Details Grid including Date, Time, and Price */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         {[
           { icon: <GiHourglass className="text-2xl" />, title: 'Duration', desc: '90 minutes of deep work' },
           { icon: <FaVideo className="text-2xl" />, title: 'Location', desc: 'Live on Zoom' },
-          { icon: <FaBullseye className="text-2xl" />, title: 'Format', desc: 'Interactive & guided' },
           { icon: <FaGift className="text-2xl" />, title: 'Bonus', desc: '7-day replay access' },
+          { icon: <FaRegCalendarAlt className="text-2xl" />, title: 'Date', desc: 'Nov 25, 2025' },
+          { icon: <FaRegClock className="text-2xl" />, title: 'Time', desc: '7:00 PM - 8:30 PM' },
+          { icon: <FaDollarSign className="text-2xl text-center" />, title: 'Price', desc: '$49' },
         ].map((item, idx) => (
           <div key={idx} className="flex items-start gap-4">
             <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-xl flex items-center justify-center shadow-lg border-[2px] border-[#e7debe] flex-shrink-0">
@@ -457,20 +460,7 @@ export default function ShadowWorkLanding() {
       </div>
       
     </div>
-    {/* Testimonial Card */}
-    <div className="mt-12 card bg-beige border-l-4 border-[#C2A570] p-8 shadow-lg">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full flex items-center justify-center flex-shrink-0 shadow-lg border-2 border-[#e7debe]">
-          <FaQuoteLeft className="text-xl text-brown drop-shadow-lg" />
-        </div>
-        <div className="flex-1">
-          <p className="text-xl italic text-dark-brown mb-4 leading-relaxed">
-            After one session I felt more safety in my body than years of therapy. Manika has a gift for creating space where healing happens naturally.
-          </p>
-          <p className="font-semibold text-dark-brown/70">— R.S.</p>
-        </div>
-      </div>
-    </div>
+  
   </div>
 </section>
 
