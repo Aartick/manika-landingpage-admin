@@ -1,0 +1,191 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { GiHourglass } from "react-icons/gi";
+import { FaEdit, FaTrash, FaEye, FaEyeSlash } from "react-icons/fa";
+
+export default function AdminDashboard() {
+  const [posts, setPosts] = useState([]);
+  const router = useRouter();
+
+  const fetchPosts = async () => {
+    const res = await fetch('/api/posts');
+    const data = await res.json();
+    setPosts(data);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const handleCreateNewPost = () => {
+    router.push('/admin/new-post');
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' });
+    router.replace('/admin');
+  };
+
+  // Delete post by ID after confirmation
+  const handleDelete = async (postId: string) => {
+    if (!confirm('Are you sure you want to delete this post?')) return;
+    const res = await fetch(`/api/posts/${postId}`, { method: 'DELETE' });
+    if (res.ok) {
+      await fetchPosts();
+    } else {
+      alert('Failed to delete post');
+    }
+  };
+
+  // Toggle visibility (hide/show)
+  const toggleVisibility = async (postId: string, visible: boolean) => {
+    const res = await fetch(`/api/posts/${postId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ visible: !visible }),
+    });
+    if (res.ok) {
+      await fetchPosts();
+    } else {
+      alert('Failed to update visibility');
+    }
+  };
+
+  // Navigate to edit page for post
+  const handleEdit = (postId: string) => {
+    router.push(`/admin/edit-post/${postId}`);
+  };
+
+  return (
+    <div className="min-h-screen bg-beige">
+      {/* Navbar */}
+      <nav className="w-full bg-gradient-to-r from-[#F6F0DE] to-[#ECDFBC] shadow-lg border-b-2 border-[#C2A570]">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-dark-brown">Admin Dashboard</h1>
+          </div>
+          <div className="flex gap-4">
+            <button 
+              className="btn-primary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
+              onClick={handleCreateNewPost}
+            >
+              Create New Post
+            </button>
+            <button 
+              className="btn-secondary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Posts List */}
+      <main className="p-8 max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-dark-brown mb-2">Your Posts</h2>
+          <p className="text-dark-brown/70">Manage all your published and draft posts</p>
+        </div>
+
+        {posts.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="bg-white rounded-2xl shadow-xl p-12 max-w-md mx-auto border-2 border-[#C2A570]/30">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full flex items-center justify-center mx-auto mb-6">
+                <GiHourglass className="text-4xl text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-dark-brown mb-3">No posts found</h3>
+              <p className="text-dark-brown/70 mb-6">Start creating your first post to see it here</p>
+              <button 
+                className="btn-primary px-8 py-3 rounded-lg font-semibold"
+                onClick={handleCreateNewPost}
+              >
+                Create Your First Post
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post: any) => (
+              <div 
+                key={post._id} 
+                className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-[#C2A570]/20 hover:border-[#C2A570]/50"
+              >
+                {/* Image Container */}
+                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#F6F0DE] to-[#ECDFBC]">
+                  <img
+                    src={post.imageUrl}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Visibility Badge */}
+                  <div className="absolute top-3 left-3">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-lg ${
+                      post.visible 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-gray-500 text-white'
+                    }`}>
+                      {post.visible ? '● Live' : '● Hidden'}
+                    </span>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button 
+                      onClick={() => handleEdit(post._id)} 
+                      className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 
+                      title="Edit"
+                    >
+                      <FaEdit size={18} />
+                    </button>
+                    {/* <button 
+                      onClick={() => toggleVisibility(post._id, post.visible)} 
+                      className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 
+                      title={post.visible ? 'Hide' : 'Show'}
+                    >
+                      {post.visible ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
+                    </button> */}
+                    <button 
+                      onClick={() => handleDelete(post._id)} 
+                      className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 
+                      title="Delete"
+                    >
+                      <FaTrash size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2 text-dark-brown line-clamp-2 group-hover:text-[#C2A570] transition-colors duration-200">
+                    {post.title}
+                  </h3>
+                  <p className="text-dark-brown/70 text-sm mb-4 line-clamp-2">
+                    {post.subtitle}
+                  </p>
+                  
+                  {/* Meta Info */}
+                  <div className="flex items-center gap-2 text-sm text-dark-brown/60 pt-4 border-t border-[#C2A570]/20">
+                    <GiHourglass className="text-[#C2A570]" />
+                    <span>Created: {new Date(post.createdAt).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric', 
+                      year: 'numeric' 
+                    })}</span>
+                  </div>
+                </div>
+
+                {/* Bottom Gradient Border */}
+                <div className="h-1 bg-gradient-to-r from-[#C2A570] via-[#D4B882] to-[#C2A570]"></div>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}

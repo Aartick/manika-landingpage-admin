@@ -511,14 +511,14 @@ export default function ShadowWorkLanding() {
       ))}
     </div>
 
-    <div className="mt-14 flex justify-center">
+    {/* <div className="mt-14 flex justify-center">
       <button
         className="btn-primary text-lg px-10 py-3 rounded-full shadow-lg bg-gradient-to-r from-[#C2A570] to-[#D4B483] text-white font-semibold hover:brightness-110 transition-all"
         onClick={scrollToEnroll}
       >
         Book Your Spot
       </button>
-    </div>
+    </div> */}
   </div>
 </section>
 
@@ -580,9 +580,9 @@ export default function ShadowWorkLanding() {
       You're Not Here By Chance
     </h2>
     <p className="text-2xl mb-8 font-light">Your healing has been calling.</p>
-    <button className="btn-primary text-xl mb-8">
+    {/* <button className="btn-primary text-xl mb-8">
       Reserve Your Seat Now
-    </button>
+    </button> */}
     <p className="text-xl italic opacity-90">
       You were always enough. You always mattered. It's time to remember.
     </p>
@@ -598,10 +598,8 @@ export default function ShadowWorkLanding() {
               Reserve Your Seat
             </button>
           </div>
-
-
-              
         </div>
+        
       )}
     </div>
   );
