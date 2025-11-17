@@ -62,26 +62,37 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-beige">
       {/* Navbar */}
       <nav className="w-full bg-gradient-to-r from-[#F6F0DE] to-[#ECDFBC] shadow-lg border-b-2 border-[#C2A570]">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-dark-brown">Admin Dashboard</h1>
-          </div>
-          <div className="flex gap-4">
-            <button 
-              className="btn-primary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
-              onClick={handleCreateNewPost}
-            >
-              Create New Post
-            </button>
-            <button 
-              className="btn-secondary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 
+      flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+
+    {/* Left - Title */}
+    <div className="flex items-center gap-4">
+      <h1 className="text-xl sm:text-2xl font-bold text-dark-brown">
+        Admin Dashboard
+      </h1>
+    </div>
+
+    {/* Right - Buttons */}
+    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <button
+        className="btn-primary px-6 py-2.5 rounded-lg font-semibold shadow-md 
+        hover:shadow-lg hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+        onClick={handleCreateNewPost}
+      >
+        Create New Post
+      </button>
+
+      <button
+        className="btn-secondary px-6 py-2.5 rounded-lg font-semibold shadow-md 
+        hover:shadow-lg hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
 
       {/* Posts List */}
       <main className="p-8 max-w-7xl mx-auto">

@@ -351,7 +351,7 @@ const [stickyCTA, setStickyCTA] = useState({
                   <img 
                     src={imagePreview} 
                     alt="Hero Image Preview" 
-                    className="rounded-xl w-full object-cover h-64" 
+                    className="rounded-xl w-full object-cover h-94" 
                   />
                   <div className="mt-4">
                     <label className="block mb-2 font-semibold text-dark-brown">Upload Image</label>

@@ -100,28 +100,31 @@ export default function OfferSection({
             ))}
           </div>
           {/* CTA Button and link */}
-          <div className="text-center">
-            <input
-              type="text"
-              value={ctaLabel}
-              onChange={e => setCtaLabel(e.target.value)}
-              placeholder="Button text"
-              className="text-xl font-semibold px-5 py-2 rounded-full mb-2 bg-white border border-[#C2A570]"
-            />
-            <input
-              type="text"
-              value={ctaLink}
-              onChange={e => setCtaLink(e.target.value)}
-              placeholder="Button link"
-              className="text-lg px-5 py-2 rounded-full mb-4 bg-white border border-[#C2A570]"
-            />
-            <button
-              className="btn-primary text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300"
-              onClick={() => window.location.href = ctaLink}
-            >
-              {ctaLabel || "Join Now"}
-            </button>
-          </div>
+         <div className="text-center w-full max-w-md mx-auto">
+  <input
+    type="text"
+    value={ctaLabel}
+    onChange={e => setCtaLabel(e.target.value)}
+    placeholder="Button text"
+    className="text-lg sm:text-xl font-semibold w-full px-5 py-2 rounded-full mb-2 bg-white border border-[#C2A570]"
+  />
+
+  <input
+    type="text"
+    value={ctaLink}
+    onChange={e => setCtaLink(e.target.value)}
+    placeholder="Button link"
+    className="text-base sm:text-lg w-full px-5 py-2 rounded-full mb-4 bg-white border border-[#C2A570]"
+  />
+
+  <button
+    className="btn-primary text-lg sm:text-xl w-full sm:w-auto px-8 sm:px-10 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300"
+    onClick={() => window.location.href = ctaLink}
+  >
+    {ctaLabel || "Join Now"}
+  </button>
+</div>
+
         </div>
       </div>
     </section>
