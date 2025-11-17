@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import Post from '@/lib/models/post';
+import { slugify } from "@/lib/slugify";
+
 
 export async function GET(
   req: NextRequest,
@@ -28,44 +30,26 @@ export async function PUT(
 
   const data = await req.json();
 
+  const existing = await Post.findById(postId);
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  // 🔥 Automatically generate updated slug from title
+  const newSlug = slugify(data.title);
+
   const updated = await Post.findByIdAndUpdate(
     postId,
     {
-      title: data.title,
-      subtitle: data.subtitle,
-      imageUrl: data.imageUrl,
-      buttons: data.buttons,
-      cards: data.cards || [],
-      problems: data.problems || [],
-      promises: data.promises || [],
-enrollLink: data.enrollLink || '#',
-    offer: data.offer, 
-          experience: data.experience,
-
-          whySection: {
-          title: data.whySection?.title || "",
-          items: Array.isArray(data.whySection?.items)
-            ? data.whySection.items
-            : [],
-        },
-
-        whoSection: data.whoSection || {},
-
-        includedSection: data.includedSection || {},
-
-        stickyCTA: data.stickyCTA,
-
-
-
-
+      ...data,
+      slug: newSlug, // 🔥 Always update slug when title changes
     },
     { new: true }
   );
 
-  if (!updated) return NextResponse.json({ error: "Not found" }, { status: 404 });
-
   return NextResponse.json(updated);
 }
+
 
 export async function DELETE(
   req: NextRequest,

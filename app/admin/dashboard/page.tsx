@@ -62,32 +62,43 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-beige">
       {/* Navbar */}
       <nav className="w-full bg-gradient-to-r from-[#F6F0DE] to-[#ECDFBC] shadow-lg border-b-2 border-[#C2A570]">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-dark-brown">Admin Dashboard</h1>
-          </div>
-          <div className="flex gap-4">
-            <button 
-              className="btn-primary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
-              onClick={handleCreateNewPost}
-            >
-              Create New Post
-            </button>
-            <button 
-              className="btn-secondary px-6 py-2.5 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200" 
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 
+      flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+
+    {/* Left - Title */}
+    <div className="flex items-center gap-4">
+      <h1 className="text-xl sm:text-2xl font-bold text-dark-brown">
+        Admin Dashboard
+      </h1>
+    </div>
+
+    {/* Right - Buttons */}
+    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <button
+        className="btn-primary px-6 py-2.5 rounded-lg font-semibold shadow-md 
+        hover:shadow-lg hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+        onClick={handleCreateNewPost}
+      >
+        Create New Landing Page
+      </button>
+
+      <button
+        className="btn-secondary px-6 py-2.5 rounded-lg font-semibold shadow-md 
+        hover:shadow-lg hover:scale-105 transition-all duration-200 w-full sm:w-auto"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
+
 
       {/* Posts List */}
       <main className="p-8 max-w-7xl mx-auto">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-dark-brown mb-2">Your Posts</h2>
-          <p className="text-dark-brown/70">Manage all your published and draft posts</p>
+          <h2 className="text-3xl font-bold text-dark-brown mb-2">Your Landing Page</h2>
+          <p className="text-dark-brown/70">Manage all your published and draft landing pages</p>
         </div>
 
         {posts.length === 0 ? (
@@ -96,13 +107,13 @@ export default function AdminDashboard() {
               <div className="w-20 h-20 bg-gradient-to-br from-[#C2A570] to-[#D4B882] rounded-full flex items-center justify-center mx-auto mb-6">
                 <GiHourglass className="text-4xl text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-dark-brown mb-3">No posts found</h3>
+              <h3 className="text-2xl font-bold text-dark-brown mb-3">No Landing Page found</h3>
               <p className="text-dark-brown/70 mb-6">Start creating your first post to see it here</p>
               <button 
                 className="btn-primary px-8 py-3 rounded-lg font-semibold"
                 onClick={handleCreateNewPost}
               >
-                Create Your First Post
+                Create Your First Landing Page
               </button>
             </div>
           </div>
@@ -135,20 +146,24 @@ export default function AdminDashboard() {
 
                   {/* Action Buttons */}
                   <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button 
-                      onClick={() => handleEdit(post._id)} 
-                      className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 
-                      title="Edit"
-                    >
-                      <FaEdit size={18} />
-                    </button>
-                    {/* <button 
-                      onClick={() => toggleVisibility(post._id, post.visible)} 
-                      className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 
-                      title={post.visible ? 'Hide' : 'Show'}
-                    >
-                      {post.visible ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
-                    </button> */}
+                   <button
+  onClick={() => window.open(`/${post.slug}`, "_blank")}
+  className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110"
+  title="View"
+>
+  <FaEye size={18} />
+</button>
+
+                    {/* Edit Button — ADDED BACK */}
+  <button
+    onClick={() => handleEdit(post._id)}
+    className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110"
+    title="Edit"
+  >
+    <FaEdit size={18} />
+
+  </button>
+
                     <button 
                       onClick={() => handleDelete(post._id)} 
                       className="bg-white/90 backdrop-blur-sm p-2.5 rounded-lg text-red-600 hover:bg-red-600 hover:text-white transition-all duration-200 shadow-lg hover:scale-110" 

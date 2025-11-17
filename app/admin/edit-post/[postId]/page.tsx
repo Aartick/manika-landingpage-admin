@@ -122,15 +122,21 @@ export default function EditPostPage() {
 
   // -------------- fetch existing post ---------------
   useEffect(() => {
-    async function fetchPost() {
-      if (!params?.postId) {
-        console.error('No postId param provided');
-        return;
-      }
-      setIsLoading(true);
+    console.log("Params from useParams:", params);
 
-      try {
-        const res = await fetch(`/api/posts/${params.postId}`);
+    async function fetchPost() {
+      const postId = params?.postId;
+
+if (!postId) {
+  console.error("No postId param provided");
+  return;
+}
+
+setIsLoading(true);
+
+try {
+  const res = await fetch(`/api/posts/${postId}`);
+
         if (!res.ok) {
           console.error('Failed to fetch post:', res.statusText);
           alert('Failed to fetch post');

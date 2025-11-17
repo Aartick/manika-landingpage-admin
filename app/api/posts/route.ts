@@ -10,12 +10,10 @@ function slugify(text: string) {
     .replace(/[\s\W-]+/g, '-');
 }
 
-// Generate unique slug
 async function generateUniqueSlug(baseSlug: string) {
   let slug = baseSlug;
   let counter = 1;
 
-  // Keep checking until you find a slug that doesn't exist
   while (await Post.findOne({ slug })) {
     slug = `${baseSlug}-${counter}`;
     counter++;
@@ -37,7 +35,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create base slug from title
     const baseSlug = slugify(data.title);
 
     if (!baseSlug) {
@@ -47,52 +44,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
-// Ensure slug is unique
-const slug = await generateUniqueSlug(baseSlug);
+    const slug = await generateUniqueSlug(baseSlug);
 
-// Create post
-const createdPost = await Post.create({
-  title: data.title,
-  subtitle: data.subtitle,
-  imageUrl: data.imageUrl,
-  buttons: data.buttons || [],
-  cards: data.cards || [],
-  problems: data.problems || [],
-  promises: data.promises || [],
-  enrollLink: data.enrollLink || '#',
-  
-    offer: data.offer || {}, 
-
-  experience: data.experience || {},
-
-  whySection: {
-  title: data.whySection?.title || "",
-  items: Array.isArray(data.whySection?.items)
-    ? data.whySection.items
-    : [],
-},
-
-whoSection: data.whoSection || {},
-
-includedSection: data.includedSection || {},
-
-stickyCTA: {
-        text: data.stickyCTA?.text || "",
-        buttonLabel: data.stickyCTA?.buttonLabel || "",
-        buttonLink: data.stickyCTA?.buttonLink || "",
-      },
-
-
-  slug,
-  visible: true,
-});
+    const createdPost = await Post.create({
+      title: data.title,
+      subtitle: data.subtitle,
+      imageUrl: data.imageUrl,
+      buttons: data.buttons || [],
+      cards: data.cards || [],
+      problems: data.problems || [],
+      promises: data.promises || [],
+      enrollLink: data.enrollLink || "#",
+      offer: data.offer || {},
+      experience: data.experience || {},
+      whySection: data.whySection || {},
+      whoSection: data.whoSection || {},
+      includedSection: data.includedSection || {},
+      stickyCTA: data.stickyCTA || {},
+      slug,
+      visible: true,
+    });
 
     return NextResponse.json(createdPost);
-
   } catch (err: any) {
-    console.error('API /api/posts POST error:', err);
+    console.error("❌ POST /api/posts error:", err);
     return NextResponse.json(
-      { error: err.message || 'Internal server error' },
+      { error: err.message || "Internal server error" },
       { status: 500 }
     );
   }
