@@ -21,8 +21,7 @@ export default function NewPostPage() {
   const [subheading, setSubheading] = useState(
     'A 90-minute somatic shadow-work workshop for women ready to release guilt, shame, and self-criticism'
   );
-const [videoFile, setVideoFile] = useState<File | null>(null);
-const [videoPreview, setVideoPreview] = useState('');
+const [videoUrl, setVideoUrl] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   // Buttons
@@ -145,27 +144,15 @@ const [stickyCTA, setStickyCTA] = useState({
 const handleSave = async () => {
   setLoading(true);
 
-  let videoBase64 = '';
+ const videoBase64 = videoUrl.trim();
 
-  // Validate video presence
-  if (!videoFile && !videoPreview) {
-    alert('Please upload a video before saving.');
-    setLoading(false);
-    return;
-  }
+if (!videoBase64) {
+  alert("Please enter a YouTube Shorts video URL before saving.");
+  setLoading(false);
+  return;
+}
 
 
-  if (videoFile) {
-    try {
-      videoBase64 = await getBase64(videoFile);
-    } catch (e) {
-      alert('Failed to process the video. Please try again.');
-      setLoading(false);
-      return;
-    }
-  } else {
-    videoBase64 = videoPreview;
-  }
 
   if (!slug.trim()) {
     alert('Slug is required! Please enter a slug.');
@@ -178,7 +165,7 @@ const handleSave = async () => {
   const postData = {
     title: headline,
     subtitle: subheading,
-    videoUrl: videoBase64 || videoPreview || '',
+  videoUrl: videoBase64,
     buttons: [
       { label: btn1Label, url: btn1Url },
       { label: btn2Label, url: btn2Url },
@@ -232,14 +219,7 @@ const handleSave = async () => {
 };
 
 
-useEffect(() => {
-  if (!videoFile) return;
 
-  const objectUrl = URL.createObjectURL(videoFile);
-  setVideoPreview(objectUrl) ;
-
-  return () => URL.revokeObjectURL(objectUrl);
-}, [videoFile]);
 
 
 const getBase64 = (file: File): Promise<string> => {
@@ -275,6 +255,28 @@ const getBase64 = (file: File): Promise<string> => {
   const handleCancel = () => {
     router.push('/admin/dashboard');
   };
+
+  function transformYoutubeUrl(url: string) {
+  try {
+    const urlObj = new URL(url);
+    let videoId = "";
+    if (urlObj.hostname.includes("youtube.com")) {
+      const paths = urlObj.pathname.split("/");
+      if (paths[1] === "shorts" && paths[2]) {
+        videoId = paths[2];
+      } else if (urlObj.searchParams.get("v")) {
+        videoId = urlObj.searchParams.get("v") || "";
+      }
+    } else if (urlObj.hostname === "youtu.be") {
+      videoId = urlObj.pathname.slice(1);
+    }
+    if (!videoId) return "";
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+  } catch {
+    return "";
+  }
+}
+
 
   return (
     <div className="bg-background bg-beige min-h-screen text-dark-brown">
@@ -395,28 +397,38 @@ const getBase64 = (file: File): Promise<string> => {
             <div className="flex-1 max-w-md w-full">
               <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 shadow-2xl">
                 <div className="rounded-[1.25rem] bg-white p-4 shadow-inner">
-                  {videoPreview ? (
-  <video
-    src={videoPreview}
-    controls
-    className="rounded-xl w-full h-80 object-cover"
+                  <div>
+  <label className="block mb-2 font-semibold text-dark-brown">Video URL</label>
+  <input
+    type="url"
+    placeholder="https://www.youtube.com/shorts/VIDEO_ID"
+    value={videoUrl}
+    onChange={(e) => setVideoUrl(e.target.value)}
+    className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none"
   />
+</div>
+
+{videoUrl ? (
+  <div className="mt-6 aspect-video rounded-xl overflow-hidden">
+    <iframe
+      src={transformYoutubeUrl(videoUrl)}
+      title="YouTube Shorts Player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      className="w-full h-full"
+    />
+  </div>
 ) : (
-  <div className="rounded-xl w-full h-80 bg-gray-200 flex items-center justify-center text-dark-brown/50">
-    No video selected
+  <div className="rounded-xl w-full h-80 bg-gray-200 flex items-center justify-center text-dark-brown/50 mt-6">
+    No video URL entered
   </div>
 )}
 
 
                   <div className="mt-4">
 <label className="block mb-2 font-semibold text-dark-brown">Upload Video</label>
-                   <input 
-  type="file"
-  accept="video/mp4,video/webm,video/ogg"
-  onChange={(e) => {
-    if (e.target.files && e.target.files[0]) setVideoFile(e.target.files[0]);
-  }}
-/>
+                  
 
                   </div>
                 </div>
