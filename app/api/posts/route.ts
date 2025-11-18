@@ -28,28 +28,40 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    if (!data.title || !data.subtitle || !data.imageUrl) {
+    // 🔥 1. Validate required fields
+    if (!data.title || !data.subtitle || !data.videoUrl) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const baseSlug = slugify(data.title);
-
-    if (!baseSlug) {
+    // 🔥 2. Validate slug
+    if (!data.slug || data.slug.trim() === "") {
       return NextResponse.json(
-        { error: 'Invalid title for slug creation' },
+        { error: "Slug is required" },
         { status: 400 }
       );
     }
 
-    const slug = await generateUniqueSlug(baseSlug);
+    // 🔥 3. Clean slug
+   const cleanedSlug = slugify(data.slug);
 
+
+    // 🔥 4. Check uniqueness
+    const exists = await Post.findOne({ slug: cleanedSlug });
+    if (exists) {
+      return NextResponse.json(
+        { error: "Slug already exists" },
+        { status: 409 }
+      );
+    }
+
+    // 🔥 5. Create post with ADMIN slug
     const createdPost = await Post.create({
       title: data.title,
       subtitle: data.subtitle,
-      imageUrl: data.imageUrl,
+      videoUrl: data.videoUrl,
       buttons: data.buttons || [],
       cards: data.cards || [],
       problems: data.problems || [],
@@ -61,7 +73,7 @@ export async function POST(req: NextRequest) {
       whoSection: data.whoSection || {},
       includedSection: data.includedSection || {},
       stickyCTA: data.stickyCTA || {},
-      slug,
+      slug: cleanedSlug,
       visible: true,
     });
 

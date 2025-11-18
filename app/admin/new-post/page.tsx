@@ -13,14 +13,16 @@ import IncludedSectionCreate from '@/components/create-post/sectionEight';
 
 export default function NewPostPage() {
   const router = useRouter();
+  const [slug, setSlug] = useState("");
+
 
   // Hero
   const [headline, setHeadline] = useState('Heal the Wound of Not-Enoughness');
   const [subheading, setSubheading] = useState(
     'A 90-minute somatic shadow-work workshop for women ready to release guilt, shame, and self-criticism'
   );
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('/heroimage1.jpg');
+const [videoFile, setVideoFile] = useState<File | null>(null);
+const [videoPreview, setVideoPreview] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Buttons
@@ -140,102 +142,127 @@ const [stickyCTA, setStickyCTA] = useState({
 
 
   // Save handler
-  const handleSave = async () => {
-    setLoading(true);
+const handleSave = async () => {
+  setLoading(true);
 
-    let imageBase64 = '';
+  let videoBase64 = '';
 
-    if (imageFile) {
-      try {
-        imageBase64 = await getBase64(imageFile);
-      } catch (e) {
-        alert('Failed to process the image. Please try again.');
-        setLoading(false);
-        return;
-      }
-    } else {
-      imageBase64 = imagePreview;
-    }
-
-    const postData = {
-      title: headline,
-      subtitle: subheading,
-      imageUrl: imageBase64,
-      buttons: [
-        { label: btn1Label, url: btn1Url },
-        { label: btn2Label, url: btn2Url },
-      ],
-      cards,
-      problems,
-      promises,
-      enrollLink,
-      offer: {
-        title: offerTitle,
-        subtitle: offerSubtitle,
-        description: mainCardDesc,
-        // send icon as the string id, not JSX
-        details: detailItems.map(item => ({
-          icon: item.icon,
-          title: item.title,
-          desc: item.desc,
-        })),
-        ctaLabel,
-        ctaLink,
-      },
-      experience,
-      whySection,
-      whoSection,
-      includedSection,
-            stickyCTA,
+  // Validate video presence
+  if (!videoFile && !videoPreview) {
+    alert('Please upload a video before saving.');
+    setLoading(false);
+    return;
+  }
 
 
-    };
-
+  if (videoFile) {
     try {
-      const res = await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData),
-      });
-
-      if (!res.ok) {
-        const errText = await res.text().catch(() => '');
-        console.error('Save failed response:', res.status, errText);
-        alert('Failed to save post. Please try again.');
-        setLoading(false);
-        return;
-      }
-      alert('Post saved successfully!');
-      router.push('/admin/dashboard');
-    } catch (error) {
-      console.error('Error saving post:', error);
-      alert('Error saving post. Please try again.');
+      videoBase64 = await getBase64(videoFile);
+    } catch (e) {
+      alert('Failed to process the video. Please try again.');
       setLoading(false);
-    }
-  };
-
-  // Image preview
-  useEffect(() => {
-    if (!imageFile) {
-      setImagePreview('/heroimage1.jpg');
       return;
     }
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreview(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [imageFile]);
+  } else {
+    videoBase64 = videoPreview;
+  }
 
-  const getBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === 'string') resolve(reader.result);
-        else reject('Error reading file');
-      };
-      reader.onerror = (err) => reject(err);
-    });
+  if (!slug.trim()) {
+    alert('Slug is required! Please enter a slug.');
+    setLoading(false);
+    return;
+  }
+
+
+  // Continue saving data as usual
+  const postData = {
+    title: headline,
+    subtitle: subheading,
+    videoUrl: videoBase64 || videoPreview || '',
+    buttons: [
+      { label: btn1Label, url: btn1Url },
+      { label: btn2Label, url: btn2Url },
+    ],
+    cards,
+    problems,
+    promises,
+    enrollLink,
+    offer: {
+      title: offerTitle,
+      subtitle: offerSubtitle,
+      description: mainCardDesc,
+      details: detailItems.map((item) => ({
+        icon: item.icon,
+        title: item.title,
+        desc: item.desc,
+      })),
+      ctaLabel,
+      ctaLink,
+    },
+    experience,
+    whySection,
+    whoSection,
+    includedSection,
+    stickyCTA,
+    slug,
   };
+
+  // proceed with save API call as before
+  try {
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(postData),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      console.error('Save failed response:', res.status, errText);
+      alert('Failed to save post. Please try again.');
+      setLoading(false);
+      return;
+    }
+    alert('Post saved successfully!');
+    router.push('/admin/dashboard');
+  } catch (error) {
+    console.error('Error saving post:', error);
+    alert('Error saving post. Please try again.');
+    setLoading(false);
+  }
+};
+
+
+useEffect(() => {
+  if (!videoFile) return;
+
+  const objectUrl = URL.createObjectURL(videoFile);
+  setVideoPreview(objectUrl) ;
+
+  return () => URL.revokeObjectURL(objectUrl);
+}, [videoFile]);
+
+
+const getBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      let result = reader.result as string;
+
+      // Force proper MIME type for video
+      if (!result.startsWith("data:video")) {
+        const base64 = result.split(",")[1];
+        result = `data:video/mp4;base64,${base64}`;
+      }
+
+      resolve(result);
+    };
+
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 
   const updateCard = (index: number, field: 'title' | 'description', value: string) => {
     setCards(prev => {
@@ -275,6 +302,22 @@ const [stickyCTA, setStickyCTA] = useState({
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+        <div>
+  <label className="block mb-2 font-bold text-dark-brown">Slug (URL)</label>
+  <input
+    type="text"
+    value={slug}
+    onChange={(e) => setSlug(e.target.value)}
+    onBlur={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""))}
+    placeholder="enter-custom-slug"
+    className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none"
+  />
+  <p className="text-sm text-dark-brown/70 mt-1">
+    Example: shadow-work-session → final URL will be /shadow-work-session
+  </p>
+</div>
+
         {/* Hero Section */}
         <section className="bg-beige py-12 px-8 rounded-2xl shadow-xl">
           <h2 className="text-2xl font-bold mb-6 text-dark-brown border-b-2 border-[#C2A570] pb-3">Hero Section</h2>
@@ -283,13 +326,17 @@ const [stickyCTA, setStickyCTA] = useState({
             <div className="flex-1 space-y-6">
               <div>
                 <label className="block mb-2 font-bold text-dark-brown" htmlFor="headline">Headline</label>
-                <input 
-                  id="headline" 
-                  type="text" 
-                  value={headline} 
-                  onChange={e => setHeadline(e.target.value)} 
-                  className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none" 
-                />
+<input 
+  id="headline" 
+  type="text" 
+  value={headline} 
+  onChange={(e) => {
+    const val = e.target.value;
+    setHeadline(val);
+    setSlug(prev => prev ? prev : val.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""));
+  }} 
+  className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none" 
+/>
               </div>
               
               <div>
@@ -348,21 +395,29 @@ const [stickyCTA, setStickyCTA] = useState({
             <div className="flex-1 max-w-md w-full">
               <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 shadow-2xl">
                 <div className="rounded-[1.25rem] bg-white p-4 shadow-inner">
-                  <img 
-                    src={imagePreview} 
-                    alt="Hero Image Preview" 
-                    className="rounded-xl w-full object-cover h-94" 
-                  />
+                  {videoPreview ? (
+  <video
+    src={videoPreview}
+    controls
+    className="rounded-xl w-full h-80 object-cover"
+  />
+) : (
+  <div className="rounded-xl w-full h-80 bg-gray-200 flex items-center justify-center text-dark-brown/50">
+    No video selected
+  </div>
+)}
+
+
                   <div className="mt-4">
-                    <label className="block mb-2 font-semibold text-dark-brown">Upload Image</label>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C2A570] file:text-white hover:file:bg-[#B09560] file:cursor-pointer" 
-                      onChange={e => {
-                        if (e.target.files && e.target.files.length > 0) setImageFile(e.target.files[0]);
-                      }} 
-                    />
+<label className="block mb-2 font-semibold text-dark-brown">Upload Video</label>
+                   <input 
+  type="file"
+  accept="video/mp4,video/webm,video/ogg"
+  onChange={(e) => {
+    if (e.target.files && e.target.files[0]) setVideoFile(e.target.files[0]);
+  }}
+/>
+
                   </div>
                 </div>
               </div>

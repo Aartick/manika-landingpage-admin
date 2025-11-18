@@ -22,9 +22,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ postId: string }> }
+  context: { params: Promise<{ postId: string }> } // <-- type
 ) {
-  const { postId } = await context.params;
+
+  const { postId } = await context.params; // <-- await
 
   await dbConnect();
 
@@ -35,14 +36,27 @@ export async function PUT(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  // 🔥 Automatically generate updated slug from title
-  const newSlug = slugify(data.title);
+if (!data.slug || data.slug.trim() === "") {
+  return NextResponse.json({ error: "Slug is required" }, { status: 400 });
+}
+
+const cleanSlug = slugify(data.slug);
+
+// Check duplicate slug except current post
+const exists = await Post.findOne({ slug: cleanSlug, _id: { $ne: postId } });
+if (exists) {
+  return NextResponse.json(
+    { error: "Slug already in use. Choose a different one." },
+    { status: 400 }
+  );
+}
+
 
   const updated = await Post.findByIdAndUpdate(
     postId,
     {
       ...data,
-      slug: newSlug, // 🔥 Always update slug when title changes
+slug: cleanSlug
     },
     { new: true }
   );

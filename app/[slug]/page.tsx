@@ -21,13 +21,15 @@ import ExperienceSection from "@/components/posts/ExperienceSection";
 import WhySectionUser from "@/components/posts/WhySection";
 import WhoSection from "@/components/posts/WhoSection";
 import IncludedSectionUI from "@/components/posts/IncludedSection";
+import VideoPlayer from "@/components/posts/VideoPlayer";
+import AboutManika from "@/components/posts/AboutManika";
 
 export default async function PostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>; // Note the Promise<>
 }) {
-  const { slug } = await params;
+  const { slug } = await params; // await the params Promise here
 
   // 🔥 Fetch by slug (server-side)
   const baseUrl =
@@ -90,14 +92,7 @@ export default async function PostPage({
           <div className="relative order-1 lg:order-2">
             <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 md:p-6 shadow-2xl sm:rounded-[2rem] sm:p-6 lg:p-10">
               <div className="relative rounded-[1.25rem] bg-white p-3 md:p-5 shadow-inner sm:rounded-[1.5rem] sm:p-6 lg:p-8">
-                <div className="relative overflow-hidden rounded-xl shadow-lg sm:rounded-[1rem]">
-                  <img
-                    src={post.imageUrl || "/fallback.jpg"}
-                    alt={post.title}
-                    className="h-[440px] md:h-[600px] w-full object-cover transition-all duration-500 hover:scale-105 sm:h-[350px] lg:h-[580px]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-                </div>
+                <VideoPlayer videoUrl={post.videoUrl} />
               </div>
 
               {/* Golden Dots */}
@@ -133,6 +128,7 @@ export default async function PostPage({
         <ExperienceSection experience={post.experience} />
         <WhySectionUser whySection={post.whySection} />
         <WhoSection whoSection={post.whoSection} />
+        <AboutManika />
         <IncludedSectionUI includedSection={post.includedSection} />
       </section>
     </>

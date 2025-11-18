@@ -18,10 +18,13 @@ export default function EditPostPage() {
 
   const [headline, setHeadline] = useState('');
   const [subheading, setSubheading] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
+const [videoFile, setVideoFile] = useState<File | null>(null);
+const [videoPreview, setVideoPreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [slug, setSlug] = useState("");
+
 
   // Buttons
   const [btn1Label, setBtn1Label] = useState('Reserve Your Seat');
@@ -145,10 +148,13 @@ try {
         }
         const data = await res.json();
 
+        setSlug(data.slug || "");
+
+
         // Basic fields
         setHeadline(data.title || '');
         setSubheading(data.subtitle || '');
-        setImagePreview(data.imageUrl || '/heroimage1.jpg');
+setVideoPreview(data.videoUrl || '');
 
         // Load buttons
         if (Array.isArray(data.buttons)) {
@@ -254,21 +260,33 @@ try {
 
   // image preview for newly selected file
   useEffect(() => {
-    if (!imageFile) return;
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreview(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [imageFile]);
+  if (!videoFile) return;
+  const objectUrl = URL.createObjectURL(videoFile);
+  setVideoPreview(objectUrl);
+  return () => URL.revokeObjectURL(objectUrl);
+}, [videoFile]);
 
-  const getBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () =>
-        typeof reader.result === 'string' ? resolve(reader.result) : reject('Error reading file');
-      reader.onerror = (error) => reject(error);
-    });
-  };
+
+const getBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      let result = reader.result as string;
+
+      // Force proper MIME type for video
+      if (!result.startsWith("data:video")) {
+        const base64 = result.split(",")[1];
+        result = `data:video/mp4;base64,${base64}`;
+      }
+
+      resolve(result);
+    };
+
+    reader.onerror = (error) => reject(error);
+  });
+};
 
   const updateCard = (index: number, field: 'title' | 'description', value: string) => {
     setCards((prev) => {
@@ -306,16 +324,22 @@ try {
 
   const handleSave = async () => {
     setLoading(true);
-    let imageBase64 = imagePreview;
-    if (imageFile) {
+let videoBase64 = videoPreview;
+    if (videoFile) {
       try {
-        imageBase64 = await getBase64(imageFile);
+        videoBase64 = await getBase64(videoFile);
       } catch {
-        alert('Failed to process image.');
+        alert('Failed to process video.');
         setLoading(false);
         return;
       }
     }
+
+    if (!slug.trim()) {
+  alert("Slug is required!");
+  setLoading(false);
+  return;
+}
 
     const buttons = [
       { label: btn1Label, url: btn1Url },
@@ -331,7 +355,7 @@ try {
     const postData = {
       title: headline,
       subtitle: subheading,
-      imageUrl: imageBase64,
+videoUrl: videoBase64,
       buttons,
       cards,
       problems,
@@ -352,7 +376,9 @@ try {
       },
       whoSection,
       includedSection,
-      stickyCTA, // **MISSING: Include stickyCTA in save**
+      stickyCTA, 
+      slug,
+
     };
 
     try {
@@ -405,6 +431,29 @@ try {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+        <div>
+  <label className="block mb-2 font-bold text-dark-brown">Slug (URL)</label>
+  <input
+    type="text"
+    value={slug}
+    onChange={(e) => setSlug(e.target.value)}
+    onBlur={(e) =>
+      setSlug(
+        e.target.value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+      )
+    }
+    placeholder="enter-custom-slug"
+    className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none"
+  />
+  <p className="text-sm text-dark-brown/70 mt-1">
+    Example: shadow-work → /shadow-work
+  </p>
+</div>
+
         {/* Hero Section */}
         <section className="bg-beige py-12 px-8 rounded-2xl shadow-xl">
           <h2 className="text-2xl font-bold mb-6 text-dark-brown border-b-2 border-[#C2A570] pb-3">Hero Section</h2>
@@ -478,21 +527,27 @@ try {
             <div className="flex-1 max-w-md w-full">
               <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 shadow-2xl">
                 <div className="rounded-[1.25rem] bg-white p-4 shadow-inner">
-                  <img 
-                    src={imagePreview} 
-                    alt="Hero Image Preview" 
-                    className="rounded-xl w-full object-cover h-64" 
-                  />
+                  <video
+  src={videoPreview}
+  controls
+  className="rounded-xl w-full h-64 object-cover"
+/>
+
+<label className="block mb-2 font-semibold text-dark-brown">
+  Upload Video
+</label>
+
                   <div className="mt-4">
-                    <label className="block mb-2 font-semibold text-dark-brown">Upload Image</label>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C2A570] file:text-white hover:file:bg-[#B09560] file:cursor-pointer" 
-                      onChange={e => {
-                        if (e.target.files && e.target.files.length > 0) setImageFile(e.target.files[0]);
-                      }} 
-                    />
+                    <label className="block mb-2 font-semibold text-dark-brown">Upload Video</label>
+                    <input
+  type="file"
+  accept="video/mp4,video/webm,video/ogg"
+  onChange={(e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setVideoFile(e.target.files[0]);
+    }
+  }}
+/>
                   </div>
                 </div>
               </div>
