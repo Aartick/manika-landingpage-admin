@@ -89,7 +89,7 @@ const PostSchema = new Schema(
   {
     title: { type: String, required: true },
     subtitle: { type: String, required: true },
-    imageUrl: { type: String, required: true },
+videoUrl: { type: String, required: false },
 
     // Buttons
     buttons: [
