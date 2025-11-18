@@ -36,6 +36,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const isValidYoutubeUrl = (url: string) => /(youtube\.com|youtu\.be)/.test(url);
+
+if (!isValidYoutubeUrl(data.videoUrl)) {
+  return NextResponse.json({ error: "Invalid YouTube video URL" }, { status: 400 });
+}
+
+
     // 🔥 2. Validate slug
     if (!data.slug || data.slug.trim() === "") {
       return NextResponse.json(

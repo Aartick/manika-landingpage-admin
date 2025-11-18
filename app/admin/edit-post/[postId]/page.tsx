@@ -18,12 +18,11 @@ export default function EditPostPage() {
 
   const [headline, setHeadline] = useState('');
   const [subheading, setSubheading] = useState('');
-const [videoFile, setVideoFile] = useState<File | null>(null);
-const [videoPreview, setVideoPreview] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+const [videoUrl, setVideoUrl] = useState<string>("");
+const [loading, setLoading] = useState(false);
+const [isLoading, setIsLoading] = useState(true);
 
-  const [slug, setSlug] = useState("");
+const [slug, setSlug] = useState("");
 
 
   // Buttons
@@ -154,7 +153,7 @@ try {
         // Basic fields
         setHeadline(data.title || '');
         setSubheading(data.subtitle || '');
-setVideoPreview(data.videoUrl || '');
+setVideoUrl(data.videoUrl || "");
 
         // Load buttons
         if (Array.isArray(data.buttons)) {
@@ -258,35 +257,7 @@ setVideoPreview(data.videoUrl || '');
     fetchPost();
   }, [params?.postId]);
 
-  // image preview for newly selected file
-  useEffect(() => {
-  if (!videoFile) return;
-  const objectUrl = URL.createObjectURL(videoFile);
-  setVideoPreview(objectUrl);
-  return () => URL.revokeObjectURL(objectUrl);
-}, [videoFile]);
 
-
-const getBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = () => {
-      let result = reader.result as string;
-
-      // Force proper MIME type for video
-      if (!result.startsWith("data:video")) {
-        const base64 = result.split(",")[1];
-        result = `data:video/mp4;base64,${base64}`;
-      }
-
-      resolve(result);
-    };
-
-    reader.onerror = (error) => reject(error);
-  });
-};
 
   const updateCard = (index: number, field: 'title' | 'description', value: string) => {
     setCards((prev) => {
@@ -322,19 +293,38 @@ const getBase64 = (file: File): Promise<string> => {
     }
   };
 
+  function transformYoutubeUrl(url: string) {
+  try {
+    const urlObj = new URL(url);
+    let videoId = "";
+    if (urlObj.hostname.includes("youtube.com")) {
+      const paths = urlObj.pathname.split("/");
+      if (paths[1] === "shorts" && paths[2]) {
+        videoId = paths[2];
+      } else if (urlObj.searchParams.get("v")) {
+        videoId = urlObj.searchParams.get("v") || "";
+      }
+    } else if (urlObj.hostname === "youtu.be") {
+      videoId = urlObj.pathname.slice(1);
+    }
+    if (!videoId) return "";
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1`;
+  } catch {
+    return "";
+  }
+}
+
+
   const handleSave = async () => {
     setLoading(true);
-let videoBase64 = videoPreview;
-    if (videoFile) {
-      try {
-        videoBase64 = await getBase64(videoFile);
-      } catch {
-        alert('Failed to process video.');
-        setLoading(false);
-        return;
-      }
-    }
+const videoBase64 = videoUrl.trim();
 
+if (!videoBase64) {
+  alert("Please enter a YouTube Shorts video URL before saving.");
+  setLoading(false);
+  return;
+}
+    
     if (!slug.trim()) {
   alert("Slug is required!");
   setLoading(false);
@@ -355,7 +345,7 @@ let videoBase64 = videoPreview;
     const postData = {
       title: headline,
       subtitle: subheading,
-videoUrl: videoBase64,
+  videoUrl: videoBase64,
       buttons,
       cards,
       problems,
@@ -527,28 +517,32 @@ videoUrl: videoBase64,
             <div className="flex-1 max-w-md w-full">
               <div className="relative rounded-[1.75rem] bg-gradient-to-br from-[#F6F0DE] via-[#F4F0CD] to-[#ECDFBC] p-4 shadow-2xl">
                 <div className="rounded-[1.25rem] bg-white p-4 shadow-inner">
-                  <video
-  src={videoPreview}
-  controls
-  className="rounded-xl w-full h-64 object-cover"
+                <label className="block mb-2 font-semibold text-dark-brown">YouTube Shorts Video URL</label>
+<input
+  type="url"
+  placeholder="https://www.youtube.com/shorts/VIDEO_ID"
+  value={videoUrl}
+  onChange={(e) => setVideoUrl(e.target.value)}
+  className="w-full p-3 rounded-lg border-2 border-[#C2A570] text-dark-brown focus:ring-2 focus:ring-[#C2A570] focus:outline-none"
 />
+{videoUrl ? (
+  <div className="mt-6 aspect-video rounded-xl overflow-hidden">
+    <iframe
+      src={transformYoutubeUrl(videoUrl)}
+      title="YouTube Shorts Player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      className="w-full h-full"
+    />
+  </div>
+) : (
+  <div className="rounded-xl w-full h-64 bg-gray-200 flex items-center justify-center text-dark-brown/50 mt-6">
+    No video URL entered
+  </div>
+)}
 
-<label className="block mb-2 font-semibold text-dark-brown">
-  Upload Video
-</label>
 
-                  <div className="mt-4">
-                    <label className="block mb-2 font-semibold text-dark-brown">Upload Video</label>
-                    <input
-  type="file"
-  accept="video/mp4,video/webm,video/ogg"
-  onChange={(e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setVideoFile(e.target.files[0]);
-    }
-  }}
-/>
-                  </div>
                 </div>
               </div>
             </div>
