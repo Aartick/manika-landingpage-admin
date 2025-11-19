@@ -1,15 +1,12 @@
-export const runtime = 'nodejs';
-
 import { NextResponse } from 'next/server';
 
 export async function POST() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.set('admin_auth', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    expires: new Date(0),
-    sameSite: 'lax',
+  const response = NextResponse.json({ ok: true });
+
+  response.cookies.delete({
+    name: 'adminToken',
+    path: '/',   
   });
+
   return response;
 }

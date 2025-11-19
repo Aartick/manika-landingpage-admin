@@ -1,27 +1,26 @@
-export const runtime = 'nodejs';
+import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 
-import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken'
+const JWT_SECRET = process.env.JWT_SECRET!;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
 
-const SECRET = process.env.ADMIN_PASSWORD!;
-const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret_key';
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { password } = await req.json();
 
-  if (password !== SECRET) {
+  if (password !== ADMIN_PASSWORD) {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   }
 
-  const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '2h' });
+  const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '1h' });
+
   const response = NextResponse.json({ success: true });
 
-  response.cookies.set('admin_auth', token, {
+  response.cookies.set('adminToken', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: 2 * 60 * 60, // 2 hours
     sameSite: 'lax',
+    path: '/',            // FIXED → cookie visible everywhere
+    maxAge: 60 * 60,
   });
 
   return response;
