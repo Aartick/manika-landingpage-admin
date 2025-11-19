@@ -32,9 +32,15 @@ export default function PromiseSectionView({ promises, enrollLink }: PromiseSect
           That's what this workshop is designed to create for you.
         </p>
         {enrollLink &&
-          <a className="btn-primary text-lg" href={enrollLink} target="_blank" rel="noopener noreferrer">
-            Begin Your Transformation
-          </a>
+          <a
+  className="btn-primary text-lg block w-full max-w-xs mx-auto py-3 px-6 rounded-lg text-center sm:inline-block sm:w-auto"
+  href={enrollLink}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Begin Your Transformation
+</a>
+
         }
       </div>
     </section>
