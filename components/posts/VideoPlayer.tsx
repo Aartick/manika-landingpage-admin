@@ -22,7 +22,7 @@ function transformYoutubeUrl(url: string) {
       videoId = urlObj.pathname.slice(1);
     }
     if (!videoId) return "";
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}&enablejsapi=1`;
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&modestbranding=1&playsinline=1&loop=1&playlist=${videoId}&enablejsapi=1&vq=medium`;
   } catch {
     return "";
   }
@@ -33,11 +33,17 @@ export default function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    // Attempt to unmute after a short delay
+    // Attempt to unmute and set quality after a short delay
     const timer = setTimeout(() => {
       if (iframeRef.current && iframeRef.current.contentWindow) {
+        // Unmute the video
         iframeRef.current.contentWindow.postMessage(
           '{"event":"command","func":"unMute","args":""}',
+          "*"
+        );
+        // Set quality to medium (480p, closest to 420p)
+        iframeRef.current.contentWindow.postMessage(
+          '{"event":"command","func":"setPlaybackQuality","args":["medium"]}',
           "*"
         );
       }
