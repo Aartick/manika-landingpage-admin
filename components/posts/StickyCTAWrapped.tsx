@@ -1,5 +1,5 @@
 import StickyCTA from "./StickyCTA";
 
-export default function StickyCTAWrapped(props: any) {
-  return <StickyCTA {...props} />;
+export default function StickyCTAWrapped({ stickyCTA }: any) {
+  return <StickyCTA stickyCTA={stickyCTA} />;
 }
