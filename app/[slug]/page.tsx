@@ -23,6 +23,7 @@ import WhoSection from "@/components/posts/WhoSection";
 import IncludedSectionUI from "@/components/posts/IncludedSection";
 import VideoPlayer from "@/components/posts/VideoPlayer";
 import AboutManika from "@/components/posts/AboutManika";
+import StickyCTAWrapped from "@/components/posts/StickyCTAWrapped";
 
 export default async function PostPage({
   params,
@@ -134,7 +135,23 @@ const baseUrl =
         <WhoSection whoSection={post.whoSection} />
         <AboutManika />
         <IncludedSectionUI includedSection={post.includedSection} />
+<StickyCTAWrapped stickyCTA={post.stickyCTA} />
+
       </section>
+<footer className="w-full bg-beige py-25 px-6">
+  <div className="max-w-4xl mx-auto text-center px-6 pb-24">  {/* Added pb-24 here */}
+    <h2 className="text-4xl md:text-6xl font-bold mb-6">
+      You're Not Here By Chance
+    </h2>
+    <p className="text-2xl mb-8 font-light">Your healing has been calling.</p>
+    {/* <button className="btn-primary text-xl mb-8">
+      Reserve Your Seat Now
+    </button> */}
+    <p className="text-xl italic opacity-90">
+      You were always enough. You always mattered. It's time to remember.
+    </p>
+  </div>
+</footer>
     </>
   );
 }

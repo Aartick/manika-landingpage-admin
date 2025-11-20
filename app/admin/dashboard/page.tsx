@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { GiHourglass } from "react-icons/gi";
 import { FaEdit, FaTrash, FaEye, FaEllipsisV } from "react-icons/fa";
@@ -11,6 +11,8 @@ export default function AdminDashboard() {
   const [posts, setPosts] = useState<any[]>([]);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const router = useRouter();
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
 
 const [isAuthenticated, setIsAuthenticated] = useState(false);
 const [authChecked, setAuthChecked] = useState(false);
@@ -30,34 +32,59 @@ const fetchPosts = async () => {
   }
 };
 
+//to hide 3 dots(view,edit,delete) menu when clicked outside
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target as Node)
+    ) {
+      setOpenMenuId(null);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
+
 useEffect(() => {
   const checkAuth = async () => {
-const res = await fetch('/api/admin/session', {
-  credentials: 'include'
-});
+    const res = await fetch('/api/admin/session', {
+      credentials: 'include'
+    });
     const data = await res.json();
-   if (!data.admin) {
-  router.replace('/admin');
-} else {
-  setIsAuthenticated(true);
-  setAuthChecked(true);
-  await fetchPosts();
-}
+    if (!data.admin) {
+      router.replace('/admin');
+    } else {
+      setIsAuthenticated(true);
+      setAuthChecked(true);
+      await fetchPosts();
+    }
   };
   checkAuth();
 }, [router]);
 
-
 if (!authChecked) {
-  return <div>Loading...</div>;
+  return (
+    <div className="min-h-screen bg-beige flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <GiHourglass className="text-6xl text-[#C2A570] animate-spin" />
+        <p className="text-dark-brown text-xl font-semibold">
+          Loading Dashboard...
+        </p>
+      </div>
+    </div>
+  );
 }
 
 // only render dashboard UI when authenticated
 if (!isAuthenticated) return null;
 
-  const handleCreateNewPost = () => {
-    router.push('/admin/new-post');
-  };
+const handleCreateNewPost = () => {
+  router.push('/admin/new-post');
+};
 
 const handleLogout = async () => {
   await fetch('/api/admin/logout', {
@@ -207,8 +234,11 @@ const handleLogout = async () => {
                   </div>
 
                   {/* Action Buttons shown on clicking 3 dots */}
-                  {openMenuId === post._id && (
-                    <div className="absolute top-14 right-3 flex flex-col gap-2 bg-white rounded-lg shadow-lg p-2 border border-gray-300 z-50">
+{openMenuId === post._id && (
+  <div
+    ref={menuRef}
+    className="absolute top-14 right-3 flex flex-col gap-2 bg-white rounded-lg shadow-lg p-2 border border-gray-300 z-50"
+  >
                       <button
                         onClick={() => window.open(`/${post.slug}`, '_blank')}
                         className="flex items-center gap-2 px-3 py-1.5 rounded-md text-green-600 hover:bg-green-600 hover:text-white transition duration-200"
