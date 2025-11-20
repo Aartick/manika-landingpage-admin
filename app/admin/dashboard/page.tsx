@@ -5,29 +5,68 @@ import { useRouter } from 'next/navigation';
 import { GiHourglass } from "react-icons/gi";
 import { FaEdit, FaTrash, FaEye, FaEllipsisV } from "react-icons/fa";
 
+
 export default function AdminDashboard() {
+
   const [posts, setPosts] = useState<any[]>([]);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const router = useRouter();
 
-  const fetchPosts = async () => {
+const [isAuthenticated, setIsAuthenticated] = useState(false);
+const [authChecked, setAuthChecked] = useState(false);
+
+const fetchPosts = async () => {
+  try {
     const res = await fetch('/api/posts');
+    if (!res.ok) throw new Error('Failed to fetch posts');
     const data = await res.json();
     setPosts(data);
-  };
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert(String(error));
+    }
+  }
+};
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+useEffect(() => {
+  const checkAuth = async () => {
+const res = await fetch('/api/admin/session', {
+  credentials: 'include'
+});
+    const data = await res.json();
+   if (!data.admin) {
+  router.replace('/admin');
+} else {
+  setIsAuthenticated(true);
+  setAuthChecked(true);
+  await fetchPosts();
+}
+  };
+  checkAuth();
+}, [router]);
+
+
+if (!authChecked) {
+  return <div>Loading...</div>;
+}
+
+// only render dashboard UI when authenticated
+if (!isAuthenticated) return null;
 
   const handleCreateNewPost = () => {
     router.push('/admin/new-post');
   };
 
-  const handleLogout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    router.replace('/admin');
-  };
+const handleLogout = async () => {
+  await fetch('/api/admin/logout', {
+    method: 'POST',
+    credentials: 'include',
+  });
+  router.replace('/admin');
+};
+
 
   const handleDelete = async (postId: string) => {
     if (!confirm('Are you sure you want to delete this post?')) return;

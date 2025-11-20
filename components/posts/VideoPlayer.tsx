@@ -20,7 +20,7 @@ function transformYoutubeUrl(url: string) {
       videoId = urlObj.pathname.slice(1);
     }
     if (!videoId) return "";
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&modestbranding=1&playsinline=1`;
+return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&playsinline=1`;
   } catch {
     return "";
   }
@@ -30,21 +30,28 @@ export default function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   const embedUrl = transformYoutubeUrl(videoUrl);
 
   return (
-    <div className="relative overflow-hidden rounded-xl shadow-lg sm:rounded-[1rem]">
-      {embedUrl ? (
-        <iframe
-  src={embedUrl}
-  title="YouTube Shorts Player"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-  className="h-[440px] md:h-[600px] w-full rounded-xl"
-/>
-
-      ) : (
-        <div className="text-center py-20 text-gray-500">Video Not Available</div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+<div className="relative overflow-hidden rounded-2xl p-2 sm:p-4">
+        {embedUrl ? (
+          <div className="relative h-[440px] md:h-[600px] overflow-hidden rounded-lg">
+            <iframe
+              src={embedUrl}
+              title="YouTube Shorts Player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute top-1/2 left-1/2 w-full h-full"
+              style={{ 
+                transform: 'translate(-50%, -50%) scale(1.15)',
+                minHeight: '120%'
+              }}
+            />
+          </div>
+        ) : (
+          <div className="text-center py-20 text-gray-500">Video Not Available</div>
+        )}
+      <div className="absolute inset-0 pointer-events-none rounded-2xl" />
     </div>
   );
 }
+
+

@@ -7,15 +7,17 @@ export default function AdminLogin() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
+  try {
     const res = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password }),
+      credentials: 'include'
     });
 
     if (res.ok) {
@@ -24,8 +26,12 @@ export default function AdminLogin() {
       setError('Incorrect password. Try again.');
       setPassword('');
     }
+  } catch (err) {
+    setError('Network error. Please try again.');
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background text-dark-brown">
